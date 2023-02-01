@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using Movie43.DI;
+using System.Windows.Controls;
 
 namespace Movie43.UI
 {
@@ -11,8 +12,7 @@ namespace Movie43.UI
         {
             InitializeComponent();
 
-            FilmViewModel filmViewModel = new FilmViewModel();
-            DataContext = filmViewModel;
+            DataContext = Locator.Resolve<FilmViewModel>();
         }
     }
 }

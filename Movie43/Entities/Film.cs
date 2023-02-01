@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Movie43.Enums;
+using System;
 using System.ComponentModel;
 
 namespace Movie43.Entities
@@ -49,6 +50,10 @@ namespace Movie43.Entities
         /// Дата выхода фильма
         /// </summary>
         public DateTime DateOut { get; set; }
+        /// <summary>
+        /// Итоговая оценка
+        /// </summary>
+        public Verdict Verdict { get; set; }
         #endregion
     }
 }

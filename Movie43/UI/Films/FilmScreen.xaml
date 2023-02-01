@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:enumConvert="clr-namespace:Movie43.Helper.Converters.ServiceEnum"
              xmlns:local="clr-namespace:Movie43.UI"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=local:FilmViewModel}"
@@ -16,40 +17,21 @@
                   ItemsSource="{Binding Films}"
                   SelectedItem="{Binding SelectedFilm}"
                   AutoGenerateColumns="False"
-                  MinColumnWidth="100"
-                  IsReadOnly="True"
+                  IsReadOnly="False"
                   SelectionMode="Single"
                   CanUserAddRows="False"
                   HorizontalGridLinesBrush="BlueViolet"
                   VerticalGridLinesBrush="BlueViolet"
                   FontSize="14"
-                  CanUserResizeColumns="False"
-                  CanUserResizeRows="False"
-                  CanUserSortColumns="False">
+                  CanUserResizeColumns="True"
+                  CanUserResizeRows="True"
+                  CanUserSortColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="ColName" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Название"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding Genre, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Жанр"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding DateOut, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Дата выхода"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding WaitingRating, UpdateSourceTrigger=PropertyChanged}" Width="*">
-                    <DataGridTextColumn.Header>
-                        <TextBlock Text="Рейтинг ожиданий"/>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Жанр" Binding="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Дата выхода" Binding="{Binding DateOut, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Рейтинг ожиданий" Binding="{Binding WaitingRating, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Итоговая оценка" Binding="{Binding Verdict, Converter={enumConvert:EnumToStringConverter}}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -98,6 +80,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <Label Grid.Row="0" Content="Рейтинг ожидания" FontSize="15"
@@ -105,6 +88,7 @@
                 <ComboBox Grid.Row="1"
                           SelectedValue="{Binding SelectedFilm.WaitingRating}"
                           ItemsSource="{Binding Raitings}"
+                          ItemStringFormat="{}{0:d0}"
                           Cursor="Hand">
                 </ComboBox>
             </Grid>
@@ -120,7 +104,7 @@
                 <DatePicker Grid.Row="1" Width="150"
                             Cursor="Hand"
                             SelectedDateFormat="Short"
-                            SelectedDate="{Binding DateTimeOut}"/>
+                            SelectedDate="{Binding SelectedFilm.DateOut}"/>
             </Grid>
 
             <Button Grid.Column="4" 
@@ -129,7 +113,7 @@
                     HorizontalAlignment="Center"
                     Margin="10"
                     Content="Добавить"
-                    Command="{Binding AddFilm, UpdateSourceTrigger=PropertyChanged}"/>
+                    Command="{Binding AddFilmCommand, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </Grid>
 </UserControl>

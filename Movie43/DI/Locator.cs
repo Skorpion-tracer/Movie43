@@ -2,6 +2,7 @@
 using Movie43.Models;
 using Movie43.Repositories;
 using Movie43.Services;
+using Movie43.UI;
 using Ninject;
 using System;
 
@@ -52,7 +53,7 @@ namespace Movie43.DI
 
         private static void BindViewModels()
         {
-
+            BindTransient<FilmViewModel>();
         }
 
         private static void BindServices()
