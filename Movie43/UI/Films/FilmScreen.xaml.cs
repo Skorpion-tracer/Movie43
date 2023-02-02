@@ -1,4 +1,5 @@
 ﻿using Movie43.DI;
+using System.ComponentModel;
 using System.Windows.Controls;
 
 namespace Movie43.UI
@@ -11,6 +12,8 @@ namespace Movie43.UI
         public FilmScreen()
         {
             InitializeComponent();
+
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
 
             DataContext = Locator.Resolve<FilmViewModel>();
         }

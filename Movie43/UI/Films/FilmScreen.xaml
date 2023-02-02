@@ -4,21 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:enumConvert="clr-namespace:Movie43.Helper.Converters.ServiceEnum"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:enums="clr-namespace:Movie43.Enums"
              xmlns:local="clr-namespace:Movie43.UI"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=local:FilmViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="500">
+
+    <UserControl.Resources>
+        <Style x:Key="StackAction" TargetType="StackPanel">
+            <Style.Triggers>
+                <Trigger Property="Tag">
+                    <Trigger.Value>
+                        <enums:ActionItem>0</enums:ActionItem>
+                    </Trigger.Value>
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+                <Trigger Property="Tag">
+                    <Trigger.Value>
+                        <enums:ActionItem>1</enums:ActionItem>
+                    </Trigger.Value>
+                    <Setter Property="IsEnabled" Value="True"/>
+                </Trigger>
+                <Trigger Property="Tag">
+                    <Trigger.Value>
+                        <enums:ActionItem>2</enums:ActionItem>
+                    </Trigger.Value>
+                    <Setter Property="IsEnabled" Value="True"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="GridIsOpen" TargetType="Grid">
+            <Style.Triggers>
+                <Trigger Property="Tag">
+                    <Trigger.Value>
+                        <sys:Boolean>True</sys:Boolean>
+                    </Trigger.Value>
+                    <Setter Property="Grid.Column" Value="0"/>
+                </Trigger>
+                <Trigger Property="Tag">
+                    <Trigger.Value>
+                        <sys:Boolean>False</sys:Boolean>
+                    </Trigger.Value>
+                    <Setter Property="Grid.Column" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid Background="AliceBlue">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" 
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <DataGrid Grid.Column="0" 
                   ItemsSource="{Binding Films}"
                   SelectedItem="{Binding SelectedFilm}"
+                  Background="Transparent"
+                  BorderBrush="BlueViolet"
+                  BorderThickness="0 0 1 0"
                   AutoGenerateColumns="False"
                   IsReadOnly="False"
-                  SelectionMode="Single"
+                  SelectionMode="Extended"
                   CanUserAddRows="False"
                   HorizontalGridLinesBrush="BlueViolet"
                   VerticalGridLinesBrush="BlueViolet"
@@ -31,89 +82,100 @@
                 <DataGridTextColumn Header="Жанр" Binding="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Дата выхода" Binding="{Binding DateOut, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Рейтинг ожиданий" Binding="{Binding WaitingRating, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Итоговая оценка" Binding="{Binding Verdict, Converter={enumConvert:EnumToStringConverter}}"/>
+                <DataGridTextColumn Header="Итоговая оценка" Binding="{Binding Verdict, Converter={enumConvert:EnumToStringConverter}}" Width="*"/>
             </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu Tag="{Binding SelectedFilm}">
+                    <ContextMenu.Style>
+                        <Style TargetType="ContextMenu">
+                            <Style.Triggers>
+                                <Trigger Property="Tag" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContextMenu.Style>
+                    <MenuItem Header="Редактировать"/>
+                    <MenuItem Header="Удалить"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
 
-        <Grid Grid.Row="1">
+        <Grid Tag="{Binding IsOpenPanelEdit}"
+              Style="{StaticResource GridIsOpen}"
+              HorizontalAlignment="Right"
+              Background="#E1E3FC">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Button Width="15"
+                    Command="{Binding OpenPanelEditCommand}">
+            </Button>
+            <StackPanel x:Name="PanelEditing" Grid.Column="1"
+                        Tag="{Binding ActionItem}"
+                        Style="{StaticResource StackAction}">
 
-            <Grid Grid.Column="0" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Content="Название" FontSize="15"
-                       HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="1" Width="150"
+                <StackPanel Margin="10">
+                    <TextBlock Text="Название" FontSize="15"
+                           HorizontalAlignment="Center"/>
+                    <TextBox Width="150"
                          BorderThickness="0 0 0 1"
                          BorderBrush="Black"
                          Background="Transparent"
                          Text="{Binding SelectedFilm.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          Cursor="Pen"/>
-            </Grid>
+                </StackPanel>
 
-            <Grid Grid.Column="1" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Content="Жанр" FontSize="15"
-                       HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="1" Width="150"
+                <StackPanel Margin="10">
+                    <TextBlock Text="Жанр" FontSize="15"
+                           HorizontalAlignment="Center"/>
+                    <TextBox Width="150"
                          BorderThickness="0 0 0 1"
                          BorderBrush="Black"
                          Background="Transparent"
                          Text="{Binding SelectedFilm.Genre}"
                          Cursor="Pen"/>
-            </Grid>
+                </StackPanel>
 
-            <Grid Grid.Column="2" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Content="Рейтинг ожидания" FontSize="15"
-                       HorizontalAlignment="Center"/>
-                <ComboBox Grid.Row="1"
+                <StackPanel Margin="10">
+                    <TextBlock Text="Рейтинг ожидания" FontSize="15"
+                           HorizontalAlignment="Center"/>
+                    <ComboBox Grid.Row="1"
                           SelectedValue="{Binding SelectedFilm.WaitingRating}"
                           ItemsSource="{Binding Raitings}"
                           ItemStringFormat="{}{0:d0}"
                           Cursor="Hand">
-                </ComboBox>
-            </Grid>
+                    </ComboBox>
+                </StackPanel>
 
-            <Grid Grid.Column="3" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Content="Дата выхода" FontSize="15"
-                       HorizontalAlignment="Center"/>
-                <DatePicker Grid.Row="1" Width="150"
+                <StackPanel Margin="10">
+                    <TextBlock Text="Дата выхода" FontSize="15"
+                           HorizontalAlignment="Center"/>
+                    <DatePicker Grid.Row="1" Width="150"
                             Cursor="Hand"
                             SelectedDateFormat="Short"
                             SelectedDate="{Binding SelectedFilm.DateOut}"/>
-            </Grid>
+                </StackPanel>
 
-            <Button Grid.Column="4" 
-                    Width="120" Height="30" 
+                <StackPanel Margin="10">
+                    <TextBlock Text="Оценка" FontSize="15"
+                           HorizontalAlignment="Center"/>
+                    <ComboBox Cursor="Hand"
+                          ItemsSource="{Binding SelectedFilm.Verdict, Converter={enumConvert:EnumToCollectionConverter}}"
+                          DisplayMemberPath="Description"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding SelectedFilm.Verdict}"/>
+                </StackPanel>
+
+                <Button Width="120" Height="30" 
                     VerticalAlignment="Center" 
                     HorizontalAlignment="Center"
                     Margin="10"
                     Content="Добавить"
                     Command="{Binding AddFilmCommand, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
         </Grid>
+        
     </Grid>
 </UserControl>

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Movie43"
         xmlns:ui="clr-namespace:Movie43.UI"
         mc:Ignorable="d"
-        Title= "Movie43" Height="550" Width="950"
+        Title= "Movie43" 
+        Height="550" Width="570"
         ResizeMode="NoResize">
     <Grid>
         <ui:FilmScreen/>

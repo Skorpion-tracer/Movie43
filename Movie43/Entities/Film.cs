@@ -49,11 +49,11 @@ namespace Movie43.Entities
         /// <summary>
         /// Дата выхода фильма
         /// </summary>
-        public DateTime DateOut { get; set; }
+        public DateTime DateOut { get; set; } = DateTime.Now;
         /// <summary>
         /// Итоговая оценка
         /// </summary>
-        public Verdict Verdict { get; set; }
+        public Verdict Verdict { get; set; } = Verdict.FORONETIME;
         #endregion
     }
 }

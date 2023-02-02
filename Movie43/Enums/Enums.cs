@@ -17,7 +17,7 @@ namespace Movie43.Enums
         [Description("Скука")]
         BOREDOM = 5,
         [Description("Проходняк")]
-        PROKHODNYAK = 6,
+        NOTREMARKABLE = 6,
         [Description("На один раз")]
         FORONETIME = 7,
         [Description("Не плохо")]
@@ -36,5 +36,12 @@ namespace Movie43.Enums
         BRILLIANTLY = 14,
         [Description("Шедевр")]
         MASTERPIECE = 15
+    }
+
+    public enum ActionItem : byte
+    {
+        NONE = 0,
+        ADD = 1,
+        EDIT = 2
     }
 }
