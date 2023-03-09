@@ -101,10 +101,9 @@
             </DataGrid.ContextMenu>
         </DataGrid>
 
-        <Grid Tag="{Binding IsOpenPanelEdit}"
-              Style="{StaticResource GridIsOpen}"
+        <Grid Style="{StaticResource GridIsOpen}"
               HorizontalAlignment="Right"
-              Background="#E1E3FC">
+              Background="#E1E3FC"> <!--Tag="{Binding IsOpenPanelEdit}"-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
@@ -113,8 +112,7 @@
                     Command="{Binding OpenPanelEditCommand}">
             </Button>
             <StackPanel x:Name="PanelEditing" Grid.Column="1"
-                        Tag="{Binding ActionItem}"
-                        Style="{StaticResource StackAction}">
+                        Style="{StaticResource StackAction}"> <!--Tag="{Binding ActionItem}"-->
 
                 <StackPanel Margin="10">
                     <TextBlock Text="Название" FontSize="15"
@@ -131,11 +129,15 @@
                     <TextBlock Text="Жанр" FontSize="15"
                            HorizontalAlignment="Center"/>
                     <TextBox Width="150"
-                         BorderThickness="0 0 0 1"
-                         BorderBrush="Black"
-                         Background="Transparent"
-                         Text="{Binding SelectedFilm.Genre}"
-                         Cursor="Pen"/>
+                             BorderThickness="0 0 0 1"
+                             BorderBrush="Black"
+                             Background="#6BEC6464"
+                             SelectionBrush="#FF0051"
+                             SelectionTextBrush="Aquamarine"
+                             SelectedText="555"
+                             SelectionOpacity="0.5"
+                             Text="{Binding SelectedFilm.Genre}"
+                             Cursor="Pen"/>
                 </StackPanel>
 
                 <StackPanel Margin="10">
@@ -160,20 +162,88 @@
 
                 <StackPanel Margin="10">
                     <TextBlock Text="Оценка" FontSize="15"
-                           HorizontalAlignment="Center"/>
+                               HorizontalAlignment="Center"/>
                     <ComboBox Cursor="Hand"
-                          ItemsSource="{Binding SelectedFilm.Verdict, Converter={enumConvert:EnumToCollectionConverter}}"
-                          DisplayMemberPath="Description"
-                          SelectedValuePath="Value"
-                          SelectedValue="{Binding SelectedFilm.Verdict}"/>
+                              ItemsSource="{Binding SelectedFilm.Verdict, Converter={enumConvert:EnumToCollectionConverter}}"
+                              DisplayMemberPath="Description"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedFilm.Verdict}"/>
                 </StackPanel>
 
                 <Button Width="120" Height="30" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center"
-                    Margin="10"
-                    Content="Добавить"
-                    Command="{Binding AddFilmCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Center"
+                        Margin="10"
+                        Content="Добавить"
+                        Command="{Binding AddFilmCommand, UpdateSourceTrigger=PropertyChanged}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Width="{TemplateBinding Width}"
+                                                Height="{TemplateBinding Height}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                Background="{TemplateBinding Background}">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="auto"/>
+                                                </Grid.RowDefinitions>
+                                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                                  Margin="{TemplateBinding Padding}"
+                                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                
+                                                <Border Grid.Row="1" VerticalAlignment="Bottom"
+                                                            BorderBrush="Red" BorderThickness="2"
+                                                            RenderTransformOrigin="0.5 0.5"
+                                                        RenderOptions.EdgeMode="Aliased">
+                                                    <Border.RenderTransform>
+                                                        <ScaleTransform x:Name="ScaleUnderline" ScaleX="0" d:ScaleX="1"/>
+                                                    </Border.RenderTransform>
+                                                </Border>
+
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="0:0:0:0.7"
+                                                                         Storyboard.TargetName="ScaleUnderline"
+                                                                         Storyboard.TargetProperty="ScaleX"
+                                                                         To="1">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <QuinticEase EasingMode="EaseOut"/>
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="0:0:1"
+                                                                         Storyboard.TargetName="ScaleUnderline"
+                                                                         Storyboard.TargetProperty="ScaleX"
+                                                                         To="0">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <QuinticEase EasingMode="EaseOut"/>
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
             </StackPanel>
         </Grid>
         

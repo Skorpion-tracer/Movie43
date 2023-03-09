@@ -41,6 +41,7 @@ namespace Movie43.UI
         public Film SelectedFilm { get; set; }
         public ActionItem ActionItem { get; set; }
         public bool IsOpenPanelEdit { get; set; }
+        public string SelectedText { get; set; }
         #endregion
 
         #region Команды
