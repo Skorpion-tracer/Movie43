@@ -170,6 +170,16 @@
                               SelectedValue="{Binding SelectedFilm.Verdict}"/>
                 </StackPanel>
 
+                <StackPanel Margin="10">
+                    <TextBlock Text="Оценка" FontSize="15"
+                               HorizontalAlignment="Center"/>
+                    <ComboBox Cursor="Hand"
+                              ItemsSource="{Binding SelectedFilm.Verdict, Converter={enumConvert:EnumToCollectionConverter}}"
+                              DisplayMemberPath="Description"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedFilm.Verdict}"/>
+                </StackPanel>
+
                 <Button Width="120" Height="30" 
                         VerticalAlignment="Center" 
                         HorizontalAlignment="Center"
